@@ -27,7 +27,7 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     const callbackGasLimit = networkConfig[chainId]["callbackGasLimit"]
     const interval = networkConfig[chainId]["interval"]
 
-    const args = [
+    const arguments = [
         vrfCoordinatorV2Address,
         entranceFee,
         gasLane,
@@ -37,14 +37,14 @@ module.exports = async function ({ getNamedAccounts, deployments }) {
     ]
     const raffle = await deploy("Raffle", {
         from: deployer,
-        args: args,
+        args: arguments,
         log: true,
         waitConfirmations: network.config.blockConfirmations || 1,
     })
 
     if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
         log("Verifying...")
-        await verify()
+        await verify(raffle.address, arguments)
     }
     log("--------------------------------")
 }
