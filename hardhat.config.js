@@ -19,6 +19,10 @@ module.exports = {
             chainId: 31337,
             blockConfirmations: 1,
         },
+        localhost: {
+            chainId: 31337,
+            gas: 6000000,
+        },
         goerli: {
             chainId: 5,
             blockConfirmations: 6,
@@ -50,6 +54,6 @@ module.exports = {
         },
     },
     mocha: {
-        timeout: 200000,
+        timeout: 500000,
     },
 }
