@@ -7,10 +7,11 @@ require("hardhat-contract-sizer")
 require("dotenv").config()
 /** @type import('hardhat/config').HardhatUserConfig */
 
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || "https://eth-goerli"
-const PRIVATE_KEY = process.env.PRIVATE_KEY || "0xkey"
-const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "key"
-const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "key"
+const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL || "*"
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "*"
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY || "*"
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY || "*"
+const REPORT_GAS = process.env.REPORT_GAS || false
 
 module.exports = {
     defaultNetwork: "hardhat",
@@ -27,7 +28,8 @@ module.exports = {
             chainId: 5,
             blockConfirmations: 6,
             url: GOERLI_RPC_URL,
-            accounts: [PRIVATE_KEY],
+            accounts: PRIVATE_KEY !== undefined ? [PRIVATE_KEY] : [],
+            saveDeployments: true,
         },
     },
     etherscan: {
@@ -37,17 +39,27 @@ module.exports = {
         },
     },
     gasReporter: {
-        enabled: false,
+        enabled: REPORT_GAS,
         outputFile: "gas-report.txt",
         noColors: true,
         currency: "USD",
         coinmarketcap: COINMARKETCAP_API_KEY,
         token: "ETH",
     },
-    solidity: "0.8.7",
+    solidity: {
+        compilers: [
+            {
+                version: "0.8.7",
+            },
+            {
+                version: "0.4.24",
+            },
+        ],
+    },
     namedAccounts: {
         deployer: {
             default: 0,
+            1: 0,
         },
         player: {
             default: 1,
